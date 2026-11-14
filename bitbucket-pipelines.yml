@@ -1,0 +1,26 @@
+# ব্যাকআপ ভিডিও মেশিন: GitHub কাজ না করলে অ্যাপ এখানে "render" চালায়
+image: node:20-bookworm
+
+definitions:
+  caches:
+    remotion: ~/.cache/remotion
+
+pipelines:
+  custom:
+    render:
+      - variables:
+          - name: JOB_ID
+          - name: JOB_TAG
+          - name: JOB_KEY
+          - name: CALLBACK
+      - step:
+          name: ভিডিও তৈরি
+          max-time: 30
+          caches:
+            - node
+            - remotion
+          script:
+            - apt-get update -qq && apt-get install -y -qq --no-install-recommends ffmpeg fonts-noto-color-emoji fonts-noto-core libnss3 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libgbm1 libasound2 libxrandr2 libxkbcommon0 libxfixes3 libxcomposite1 libxdamage1 libpango-1.0-0 libcairo2 libcups2 libdrm2 libxshmfence1 > /dev/null
+            - npm install --no-audit --no-fund
+            - npx remotion browser ensure
+            - node hf/run-once.mjs
