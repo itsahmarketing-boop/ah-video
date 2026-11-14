@@ -11,7 +11,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function tryFetch(url, opt) {
   let last;
   for (let i = 0; i < 3; i++) {
-    try { return await fetch(url, { ...opt, keepalive: false, headers: { ...(opt.headers || {}), Connection: 'close' } }); }
+    try { return await fetch(url, opt); }
     catch (e) { last = e; console.log('retry', i + 1, String(e && e.cause && e.cause.code || e)); await sleep(3000 * (i + 1)); }
   }
   throw last;
