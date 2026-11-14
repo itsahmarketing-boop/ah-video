@@ -6,7 +6,17 @@ import { execFileSync } from 'node:child_process';
 const { JOB_ID: id, JOB_TAG: tag, JOB_KEY: key, CALLBACK: cb } = process.env;
 if (!id || !tag || !key || !/^https:\/\/script\.google\.com\//.test(cb || '')) { console.error('missing variables'); process.exit(1); }
 const base = { backup: 1, key, id, tag };
-const send = (body) => fetch(cb, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.text());
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// রেন্ডারের সময় পুরনো সংযোগ বন্ধ হয়ে যায়, তাই প্রতিবার নতুন সংযোগ আর ব্যর্থ হলে ৩ বার চেষ্টা
+async function tryFetch(url, opt) {
+  let last;
+  for (let i = 0; i < 3; i++) {
+    try { return await fetch(url, { ...opt, keepalive: false, headers: { ...(opt.headers || {}), Connection: 'close' } }); }
+    catch (e) { last = e; console.log('retry', i + 1, String(e && e.cause && e.cause.code || e)); await sleep(3000 * (i + 1)); }
+  }
+  throw last;
+}
+const send = (body) => tryFetch(cb, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.text());
 const why = (e) => String((e && e.message) || e) + (e && e.cause ? ' (' + (e.cause.code || e.cause.message || e.cause) + ')' : '');
 
 try {
@@ -21,7 +31,7 @@ try {
     const s = JSON.parse(await send({ ...base, session: n }));
     if (!s.ok || !s.url) throw new Error('আপলোড লিংক পাওয়া যায়নি: ' + (s.error || ''));
     const buf = fs.readFileSync(path.join('out', n));
-    const up = await fetch(s.url, { method: 'PUT', headers: { 'Content-Type': s.mime, 'Content-Length': String(buf.length) }, body: buf });
+    const up = await tryFetch(s.url, { method: 'PUT', headers: { 'Content-Type': s.mime }, body: buf });
     const j = await up.json().catch(() => ({}));
     if (!up.ok || !j.id) throw new Error('Drive আপলোড হয়নি: ' + up.status);
     console.log('uploaded', n, j.id, Math.round(buf.length / 1024) + ' KB', (await send({ ...base, uploaded: n, driveId: j.id })).slice(0, 80));
