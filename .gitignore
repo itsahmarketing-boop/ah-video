@@ -1,0 +1,8 @@
+node_modules/
+out/
+public/voice.wav
+public/seg-*
+props.json
+job.json
+*.log
+p[0-9]*.json

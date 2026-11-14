@@ -1,0 +1,52 @@
+name: render
+# অ্যাপ (Apps Script) কাজ পাঠালে ভিডিও/ছবি তৈরি করে artifact হিসেবে রাখে; অ্যাপ সেখান থেকে নিয়ে Drive এ রাখে
+on:
+  repository_dispatch:
+    types: [render-quiz]
+  workflow_dispatch:
+    inputs:
+      draft_id: { description: 'job id', required: true }
+      tag: { description: 'tag', required: true }
+
+concurrency:
+  group: render-${{ github.event.client_payload.draft_id || inputs.draft_id }}
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ID: ${{ github.event.client_payload.draft_id || inputs.draft_id }}
+      TAG: ${{ github.event.client_payload.tag || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - name: কাজের ফাইল আনা
+        run: |
+          git fetch origin render --depth=1
+          git show "origin/render:jobs/${ID}.json" > job.json
+      - name: বাংলা ও ইমোজি ফন্ট
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-color-emoji fonts-noto-core > /dev/null
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/remotion
+          key: deps-${{ hashFiles('package.json') }}
+      - run: npm install --no-audit --no-fund
+      - run: npx remotion browser ensure
+      - name: ভয়েস ও দৃশ্য সাজানো
+        run: node scripts/prepare.mjs job.json
+      - name: ভিডিও তৈরি
+        run: node scripts/render.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quiz-${{ env.ID }}-${{ env.TAG }}
+          path: |
+            out/*.mp4
+            out/*.jpg
+          retention-days: 5
+          if-no-files-found: error
