@@ -73,7 +73,7 @@ let props;
 if (job.type === 'reel' || job.type === 'promo') {
   const scenes = job.scenes || [];
   const { timing, total } = timingFor(scenes.length, texts.length === scenes.length ? texts.map((x) => x.length) : scenes.map((s) => (s.say || s.text || '').length));
-  props = { kind: 'reel', scenes, timing, total, brand, style: job.style || 'clean', audio, format: job.format || 'vertical', title: (scenes[0] || {}).text };
+  props = { kind: 'reel', scenes, timing, total, brand, style: job.style || 'clean', audio, format: job.format || 'vertical', title: (scenes[0] || {}).text, niche: brand.niche || job.niche || 'default' };
 } else if (job.type === 'image') {
   props = { kind: 'image', job, brand };
 } else {   // কুইজ
@@ -86,6 +86,7 @@ if (job.type === 'reel' || job.type === 'promo') {
 /* ধরন নম্বর: অ্যাপ পাঠালে সেটা, না পাঠালে কাজের আইডি থেকে; প্রতিটা ভিডিও আলাদা দেখাবে */
 const hash = (s) => { let h = 0; for (const c of String(s || '')) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; };
 props.variant = Number.isFinite(job.variant) ? job.variant : hash(job.id || job.draft_id || Date.now()) % 64;
+props.seed = (props.variant || 0) + hash(job.id || '') % 97 + 1;   // Bold ইঞ্জিনের বৈচিত্র্যের জন্য
 /* কাটছাঁট: শুরু আর শেষ থেকে কত সেকেন্ড বাদ যাবে */
 if (props.total && job.trim) {
   const a = Math.max(0, Math.round((+job.trim.start || 0) * FPS)), b = Math.max(0, Math.round((+job.trim.end || 0) * FPS));
