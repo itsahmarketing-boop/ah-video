@@ -226,10 +226,28 @@ const Trans = ({ dur, children, dir = 0 }) => {
   return <AbsoluteFill style={{ opacity: Math.min(1, inp * 1.3) * (1 - out), transform: `translate(${tx}px,${ty}px) scale(${sc})` }}>{children}</AbsoluteFill>;
 };
 
+/* প্রতিদিন আলাদা সাজ: seed থেকে ৩টা লেআউট-মোড (সাধারণ / কার্ড / ফ্রেম) */
+const LayWrap = ({ c, lay, children }) => {
+  if (lay === 1) return (
+    <AbsoluteFill>
+      <div style={{ position: 'absolute', inset: '150px 60px', background: 'rgba(255,255,255,0.06)', border: `2px solid ${c.pop}55`, borderRadius: 52, boxShadow: '0 40px 90px rgba(0,0,0,0.3)' }} />
+      {children}
+    </AbsoluteFill>
+  );
+  if (lay === 2) return (
+    <AbsoluteFill>
+      <div style={{ position: 'absolute', inset: '70px 56px', border: `4px solid ${c.pop}66`, borderRadius: 36 }} />
+      {children}
+    </AbsoluteFill>
+  );
+  return <>{children}</>;
+};
+
 export const ReelBold = ({ scenes = [], timing = [], brand = {}, total = 300, audio, niche = 'default', seed = 1, wide = false }) => {
   const c = palette(brand);
   const f = useCurrentFrame();
   const rnd = seedRand(seed);
+  const lay = seed % 3;
   return (
     <AbsoluteFill style={{ fontFamily: FONT }}>
       <BG c={c} niche={niche} seed={seed} bgVar={Math.floor(rnd() * 2)} />
@@ -238,7 +256,7 @@ export const ReelBold = ({ scenes = [], timing = [], brand = {}, total = 300, au
         const Comp = KIND[s.kind] || ScenePoint;
         return (
           <Sequence key={i} from={tm.from} durationInFrames={tm.dur}>
-            <Trans dur={tm.dur} dir={i}><Comp s={s} c={c} n={i + 1} /></Trans>
+            <Trans dur={tm.dur} dir={i}><LayWrap c={c} lay={lay}><Comp s={s} c={c} n={i + 1} /></LayWrap></Trans>
           </Sequence>
         );
       })}
