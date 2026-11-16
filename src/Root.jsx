@@ -4,6 +4,17 @@ import { Reel, Thumb } from './Reel.jsx';
 import { Quiz, Poster } from './Quiz.jsx';
 import { LookEditorial, LookBold, LookGlass, LookArabesque } from './Preview.jsx';
 import { ReelBold, ThumbBold } from './BoldReel.jsx';
+import { Captioned } from './CaptionReel.jsx';
+import { MoneyPhone } from './MoneyPhone.jsx';
+
+const capSample = {
+  videoFile: 'test-input.mp4', brand: { name: 'হুরাইরা', primary: '#0F766E', accent: '#134E4A' }, grade: true, total: 180,
+  segments: [
+    { text: 'আসসালামু আলাইকুম বন্ধুরা', from: 6, to: 52 },
+    { text: 'আজ কথা বলব হালাল উপার্জন নিয়ে', from: 52, to: 120 },
+    { text: 'সৎ আয়েই আসল বরকত', from: 120, to: 176 },
+  ],
+};
 
 const boldSample = {
   brand: { name: 'হুরাইরা', primary: '#0F766E', accent: '#134E4A' }, niche: 'islamic', seed: 3, total: 490, audio: null,
@@ -45,5 +56,8 @@ export const Root = () => (
     <Still id="LookGlass" component={LookGlass} width={1080} height={1920} defaultProps={{ brand: hur }} />
     <Still id="LookArabesque" component={LookArabesque} width={1080} height={1920} defaultProps={{ brand: hur }} />
     <Composition id="ReelBold" component={ReelBold} fps={FPS} width={1080} height={1920} durationInFrames={490} defaultProps={boldSample} calculateMetadata={meta} />
-  </>
+    <Composition id="Captioned" component={Captioned} fps={FPS} width={1080} height={1920} durationInFrames={180} defaultProps={capSample} calculateMetadata={meta} />
+    <Composition id="CaptionedWide" component={Captioned} fps={FPS} width={1920} height={1080} durationInFrames={1350} defaultProps={capSample} calculateMetadata={meta} />
+        <Composition id="MoneyPhone" component={MoneyPhone} durationInFrames={150} fps={30} width={1080} height={1920} defaultProps={{ brand: { name: 'AH Marketing', primary: '#4F46E5', accent: '#0F172A' }, base: 1250, incoming: 500, label: 'টাকা জমা হয়েছে' }} />
+</>
 );

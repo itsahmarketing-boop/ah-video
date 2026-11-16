@@ -4,7 +4,7 @@ import { FONT, FONT_EN } from './theme.js';
 
 /* ===== রঙের ইঞ্জিন: ব্র্যান্ডের primary/accent থেকে সব রং নিজে বের করে ===== */
 const clampByte = (v) => Math.max(0, Math.min(255, Math.round(v)));
-const toRgb = (h) => { const m = /^#?([0-9a-f]{6})$/i.exec(String(h || '')); const x = m ? m[1] : '0F766E'; return [0, 2, 4].map((i) => parseInt(x.slice(i, i + 2), 16)); };
+const toRgb = (h) => { const m = /^#?([0-9a-f]{6})$/i.exec(String(h || '')); const x = m ? m[1] : '3F4C7A'; return [0, 2, 4].map((i) => parseInt(x.slice(i, i + 2), 16)); };
 const toHex = (r, g, b) => '#' + [r, g, b].map((v) => clampByte(v).toString(16).padStart(2, '0')).join('');
 const rgb2hsl = (r, g, b) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b); let h = 0, s = 0, l = (mx + mn) / 2; const d = mx - mn;
   if (d) { s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h /= 6; } return [h * 360, s, l]; };
@@ -14,10 +14,10 @@ const hsl2rgb = (h, s, l) => { h = ((h % 360) + 360) % 360 / 360; const q = l < 
 const hsl = (h, s, l) => { const [r, g, b] = hsl2rgb(h, s, l); return toHex(r, g, b); };
 /* ব্র্যান্ডের রং থেকে একটা পুরো প্যালেট */
 export function palette(brand = {}) {
-  const [h, s] = rgb2hsl(...toRgb(brand.primary || '#0F766E'));
-  const [ah, as] = rgb2hsl(...toRgb(brand.accent || brand.primary || '#134E4A'));
+  const [h, s] = rgb2hsl(...toRgb(brand.primary || '#3F4C7A'));
+  const [ah, as] = rgb2hsl(...toRgb(brand.accent || brand.primary || '#242B45'));
   return {
-    primary: brand.primary || '#0F766E',
+    primary: brand.primary || '#3F4C7A',
     deep: hsl(ah, Math.max(0.35, as), 0.12),      // পটভূমির গাঢ় প্রান্ত
     deep2: hsl(h, Math.max(0.4, s), 0.2),         // পটভূমির অন্য প্রান্ত
     pop: hsl(h, Math.min(0.85, s + 0.35), 0.72),  // উজ্জ্বল হাইলাইট (ব্র্যান্ড রঙেরই উজ্জ্বল রূপ)
