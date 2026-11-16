@@ -248,9 +248,8 @@ export const ReelBold = ({ scenes = [], timing = [], brand = {}, total = 300, au
   const f = useCurrentFrame();
   const rnd = seedRand(seed);
   const lay = seed % 3;
-  return (
-    <AbsoluteFill style={{ fontFamily: FONT }}>
-      <BG c={c} niche={niche} seed={seed} bgVar={Math.floor(rnd() * 2)} />
+  const body = (
+    <>
       {scenes.map((s, i) => {
         const tm = timing[i] || { from: i * 90, dur: 90 };
         const Comp = KIND[s.kind] || ScenePoint;
@@ -261,6 +260,14 @@ export const ReelBold = ({ scenes = [], timing = [], brand = {}, total = 300, au
         );
       })}
       <Footer c={c} brand={brand} progress={Math.min(1, f / total)} />
+    </>
+  );
+  return (
+    <AbsoluteFill style={{ fontFamily: FONT }}>
+      <BG c={c} niche={niche} seed={seed} bgVar={Math.floor(rnd() * 2)} />
+      {wide
+        ? <div style={{ position: 'absolute', top: 0, left: 960, width: 1080, height: 1920, transform: 'translateX(-50%) scale(0.5625)', transformOrigin: 'top center' }}>{body}</div>
+        : body}
       {audio && <Audio src={staticFile(audio)} />}
     </AbsoluteFill>
   );

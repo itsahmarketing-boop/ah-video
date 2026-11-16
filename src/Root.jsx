@@ -46,10 +46,10 @@ const hur = { name: 'হুরাইরা', primary: '#0F766E', accent: '#134E4
 export const Root = () => (
   <>
     <Composition id="Reel" component={ReelBold} fps={FPS} width={1080} height={1920} durationInFrames={300} defaultProps={boldSample} calculateMetadata={meta} />
-    <Composition id="ReelWide" component={Reel} fps={FPS} width={1920} height={1080} durationInFrames={300} defaultProps={{ ...sample, wide: true }} calculateMetadata={meta} />
+    <Composition id="ReelWide" component={ReelBold} fps={FPS} width={1920} height={1080} durationInFrames={300} defaultProps={{ ...boldSample, wide: true }} calculateMetadata={meta} />
     <Composition id="Quiz" component={Quiz} fps={FPS} width={1080} height={1920} durationInFrames={600} defaultProps={{ brand: sample.brand, job: { q: 'নমুনা প্রশ্ন?', options: ['ক', 'খ', 'গ', 'ঘ'] }, total: 600 }} calculateMetadata={meta} />
     <Still id="Thumb" component={ThumbBold} width={1080} height={1920} defaultProps={boldSample} />
-    <Still id="ThumbWide" component={Thumb} width={1920} height={1080} defaultProps={{ ...sample, wide: true }} />
+    <Still id="ThumbWide" component={ThumbBold} width={1920} height={1080} defaultProps={{ ...boldSample, wide: true }} />
     <Still id="Poster" component={Poster} width={1080} height={1350} defaultProps={{ brand: sample.brand, job: { title: 'নমুনা শিরোনাম', style: 'clean', object: 'bulb' } }} />
     <Still id="LookEditorial" component={LookEditorial} width={1080} height={1920} defaultProps={{ brand: hur }} />
     <Still id="LookBold" component={LookBold} width={1080} height={1920} defaultProps={{ brand: hur }} />
