@@ -71,7 +71,7 @@ const Chip = ({ c, children }) => (
 );
 const Footer = ({ c, brand, progress }) => (
   <div style={{ position: 'absolute', left: 110, right: 110, bottom: 130, display: 'flex', alignItems: 'center', gap: 22 }}>
-    {brand.logo ? <Img src={brand.logo} style={{ width: 76, height: 76, borderRadius: '50%', objectFit: 'cover', boxShadow: `0 0 0 4px rgba(255,255,255,0.25)` }} />
+    {(typeof brand.logo === 'string' && brand.logo.trim()) ? <Img src={brand.logo} style={{ width: 76, height: 76, borderRadius: '50%', objectFit: 'cover', boxShadow: `0 0 0 4px rgba(255,255,255,0.25)` }} />
       : <div style={{ width: 76, height: 76, borderRadius: '50%', background: c.pop, color: c.popInk, fontFamily: FONT, fontWeight: 700, fontSize: 32, display: 'grid', placeItems: 'center' }}>{(brand.name || 'হু').slice(0, 1)}</div>}
     <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 38, color: c.cream }}>{brand.name}</div>
     <div style={{ flex: 1, height: 8, borderRadius: 8, background: 'rgba(255,255,255,0.16)', overflow: 'hidden' }}>
@@ -293,7 +293,7 @@ export const ThumbBold = ({ scenes = [], brand = {}, niche = 'default', seed = 1
         </div>
       </AbsoluteFill>
       <div style={{ position: 'absolute', left: 110, bottom: 140, display: 'flex', alignItems: 'center', gap: 20 }}>
-        {brand.logo ? <Img src={brand.logo} style={{ width: 76, height: 76, borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 0 4px rgba(255,255,255,0.25)' }} />
+        {(typeof brand.logo === 'string' && brand.logo.trim()) ? <Img src={brand.logo} style={{ width: 76, height: 76, borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 0 4px rgba(255,255,255,0.25)' }} />
           : <div style={{ width: 76, height: 76, borderRadius: '50%', background: c.pop, color: c.popInk, fontFamily: FONT, fontWeight: 700, fontSize: 32, display: 'grid', placeItems: 'center' }}>{(brand.name || 'হু').slice(0, 1)}</div>}
         <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 38, color: c.cream }}>{brand.name}</div>
       </div>

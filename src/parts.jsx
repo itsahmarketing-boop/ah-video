@@ -49,7 +49,7 @@ export const Chrome = ({ t, progress = 0, wide }) => {
   return (
     <AbsoluteFill style={{ pointerEvents: 'none' }}>
       <div style={{ position: 'absolute', top: pad, left: pad, display: 'flex', alignItems: 'center', gap: 18 }}>
-        {t.logo ? <Img src={t.logo} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', boxShadow: `0 0 0 4px ${t.dark ? '#ffffff' : t.primary}` }} />
+        {(typeof t.logo === 'string' && t.logo.trim()) ? <Img src={t.logo} style={{ width: 84, height: 84, borderRadius: '50%', objectFit: 'cover', boxShadow: `0 0 0 4px ${t.dark ? '#ffffff' : t.primary}` }} />
           : <div style={{ width: 84, height: 84, borderRadius: '50%', background: t.primary, color: '#fff', fontFamily: FONT_EN, fontWeight: 800, fontSize: 34, display: 'grid', placeItems: 'center' }}>{(t.name || 'AH').slice(0, 2).toUpperCase()}</div>}
         <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 34, color: t.ink, letterSpacing: 0.5 }}>{t.name}</div>
       </div>

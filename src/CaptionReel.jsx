@@ -93,7 +93,7 @@ export const Captioned = ({ videoFile, segments = [], brand = {}, grade = true, 
       </AbsoluteFill>
       <AbsoluteFill style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 42%)' }} />
       <div style={{ position: 'absolute', top: 70, left: 70, display: 'flex', alignItems: 'center', gap: 16 }}>
-        {brand.logo ? <Img src={brand.logo} style={{ width: 70, height: 70, borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 0 3px rgba(255,255,255,0.8)' }} />
+        {(typeof brand.logo === 'string' && brand.logo.trim()) ? <Img src={brand.logo} style={{ width: 70, height: 70, borderRadius: '50%', objectFit: 'cover', boxShadow: '0 0 0 3px rgba(255,255,255,0.8)' }} />
           : <div style={{ width: 70, height: 70, borderRadius: '50%', background: c.pop, color: c.popInk, fontFamily: FONT, fontWeight: 700, fontSize: 30, display: 'grid', placeItems: 'center' }}>{(brand.name || 'হু').slice(0, 1)}</div>}
         <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 34, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.7)' }}>{brand.name || ''}</div>
       </div>
